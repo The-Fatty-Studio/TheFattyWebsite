@@ -10,7 +10,7 @@ You research and recommend; you do not edit files. Return concrete, ready-to-pas
 
 ## Ground rules
 - **Honest only.** No fake reviews, ratings, download counts, awards, or features that are not in CLAUDE.md. Never recommend `aggregateRating` markup without real, visible reviews. No hidden text, doorway pages, link schemes, keyword stuffing, or spammy community posting.
-- **Known constraints:** the site is a GitHub Pages *project* page (`https://orlinstefanov.github.io/TheFattyWebsite/`) with no custom domain. A project page cannot serve a root `robots.txt`, and its authority is shared with `github.io`; weigh a custom domain accordingly. The APK is hosted on Cloudflare R2. The admin pages must stay `noindex`.
+- **Known constraints:** the site is a GitHub Pages *project* page (`https://the-fatty-studio.github.io/TheFattyWebsite/`) with no custom domain. A project page cannot serve a root `robots.txt`, and its authority is shared with `github.io`; weigh a custom domain accordingly. The APK is hosted on Cloudflare R2. The admin pages must stay `noindex`.
 - **Mobile first.** Most visitors arrive on a phone, often via search or social links. Page speed, tap targets and a clear single call to action (Download APK) matter.
 - **Safety and trust** matter for APK downloads: recommend visible trust signals that are true (open about hosting, install guide, version, size, changelog).
 

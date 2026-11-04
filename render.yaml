@@ -15,7 +15,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: ALLOWED_ORIGIN
-        value: https://orlinstefanov.github.io
+        value: https://the-fatty-studio.github.io
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY

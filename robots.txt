@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://orlinstefanov.github.io/TheFattyWebsite/sitemap.xml
+Sitemap: https://the-fatty-studio.github.io/TheFattyWebsite/sitemap.xml

@@ -5,7 +5,7 @@ const httpUrl = z.string().url().regex(/^https?:\/\//, "must start with http:// 
 const schema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.coerce.number().int().positive().default(3000),
-  // Exact origin of the static site, e.g. https://orlinstefanov.github.io (no path, no trailing slash)
+  // Exact origin of the static site, e.g. https://the-fatty-studio.github.io (no path, no trailing slash)
   ALLOWED_ORIGIN: httpUrl,
   SUPABASE_URL: httpUrl,
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),

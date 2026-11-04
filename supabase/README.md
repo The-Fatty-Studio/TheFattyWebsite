@@ -28,7 +28,7 @@ The role can only be changed this way. The API never accepts a role from a clien
 ## 3. Auth settings
 Dashboard → **Authentication**:
 - **Providers → Email**: keep *Confirm email* on.
-- **URL Configuration**: Site URL = `https://orlinstefanov.github.io/TheFattyWebsite/` (adjust to your Pages URL); add the same under Redirect URLs, plus `http://localhost:*` for local testing.
+- **URL Configuration**: Site URL = `https://the-fatty-studio.github.io/TheFattyWebsite/` (adjust to your Pages URL); add the same under Redirect URLs, plus `http://localhost:*` for local testing.
 - **SMTP** (before public launch): the built-in mailer is heavily rate-limited. Add Resend SMTP credentials.
 
 ## 4. Sign in to the admin page
