@@ -21,7 +21,8 @@ Keep website copy consistent with this; do not invent features.
 - Repo root: static frontend served by GitHub Pages (`index.html`, `script.js`, `style.css`). No build step. Keep it that way.
 - `api/`: Node.js + TypeScript + Fastify backend (Render free tier). Also serves the admin pages (`api/public/admin/`). `api/scripts/publish-release.ts` uploads APKs to R2.
 - `supabase/`: SQL migrations (Postgres, Auth, RLS) and setup README.
-- `update-apk.sh`: release script (R2 upload + Supabase release row + `script.js` link, then commit/push).
+- `update-apk.sh`: release script (R2 upload + Supabase release row + `script.js` link, then commit/push). `release.cmd` runs it with prompts.
+- `update-windows.sh` / `release-windows.cmd`: same for the Windows build (a ZIP, platform `windows`); the Windows button, guide and FAQ on the site stay hidden until `WIN_PATH` in `script.js` is set.
 
 ## Decisions already made
 - DB + Auth: Supabase. APK storage: Cloudflare R2 (Supabase free caps files at 50 MB, the APK is ~54 MB).

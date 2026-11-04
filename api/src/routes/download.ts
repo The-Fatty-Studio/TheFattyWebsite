@@ -25,6 +25,7 @@ export const downloadRoutes: FastifyPluginAsyncZod<Options> = async (app, { conf
         querystring: z.object({
           // Hostname of document.referrer, extracted by the site's JS.
           ref: z.string().max(100).regex(/^[a-z0-9.-]+$/i).optional(),
+          platform: z.enum(["android", "windows"]).default("android"),
         }),
         response: {
           204: z.null().describe("Recorded"),
@@ -42,6 +43,7 @@ export const downloadRoutes: FastifyPluginAsyncZod<Options> = async (app, { conf
       const { device, family } = parseUserAgent(req.headers["user-agent"]);
       try {
         await downloads.record({
+          platform: req.query.platform,
           country: isIP(req.ip) ? (lookup(req.ip)?.country ?? null) : null,
           device,
           uaFamily: family,

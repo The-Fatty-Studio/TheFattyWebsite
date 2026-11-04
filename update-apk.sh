@@ -94,12 +94,12 @@ sed -i.bak \
   -e "s|^const APK_SIZE_MB = .*;|const APK_SIZE_MB = $SIZE_MB;|" script.js && rm -f script.js.bak
 grep -q "const APK_VERSION = '$VERSION';" script.js || die "uploaded, but failed to update script.js; set APK_PATH=$APK_URL by hand"
 
-printf '%s
-' "$APK_SRC" > "$SAVED_FILE"
+echo "$APK_SRC" > "$SAVED_FILE"
 git add script.js
 git commit -q -m "Release The Fatty v$VERSION" -m "SHA-256: $SHA"
 git push -q origin main
 
 echo
 echo "Done. Pages redeploys in 1-2 minutes."
-echo "Progress: https://github.com/OrlinStefanov/TheFattyWebsite/actions"
+REPO_URL=$(git remote get-url origin | sed -e 's|\.git$||' -e 's|^git@github\.com:|https://github.com/|')
+echo "Progress: $REPO_URL/actions"

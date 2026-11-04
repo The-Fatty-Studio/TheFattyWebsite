@@ -49,6 +49,11 @@ h1,h2,h3,.brand{font-family:var(--pixel);font-weight:400;line-height:1.3}
   transition:transform .08s,background .15s}
 .btn:hover{background:var(--red-hi)}
 .btn:active{transform:translateY(3px);border-bottom-width:2px}
+.btn-alt{background:var(--card);border:1px solid var(--line);border-bottom:5px solid var(--line)}
+.btn-alt:hover{background:#271717}
+[hidden]{display:none!important}
+.dl-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.dl-row.win-first #dl-win{order:-1}
 .btn-main{font-family:var(--pixel);font-size:16px}
 .btn-sub{font-size:13px;opacity:.85}
 .btn:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:3px}

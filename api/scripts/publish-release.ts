@@ -1,5 +1,6 @@
-// Usage: npm run release -- <path-to-apk> <version> [notes] [--dry-run]
-// Uploads the APK to Cloudflare R2, records it in `releases` and marks it current.
+// Usage: npm run release -- <path-to-apk-or-zip> <version> [notes] [--platform android|windows] [--dry-run]
+// Uploads the build to Cloudflare R2, records it in `releases` and marks it current for its platform
+// (android: the .apk, windows: the .zip).
 // Progress goes to stderr; the final stdout line is JSON ({ url, sizeBytes }) for update-apk.sh.
 import "dotenv/config";
 import { HeadBucketCommand, S3Client } from "@aws-sdk/client-s3";
@@ -33,9 +34,13 @@ const cfg = env.data!;
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
-const [apkPath, version, notes] = args.filter((a) => a !== "--dry-run");
+const platformAt = args.indexOf("--platform");
+const platform = platformAt >= 0 ? args[platformAt + 1] : "android";
+if (platform !== "android" && platform !== "windows") fail(`--platform must be android or windows, got: ${platform}`);
+const positional = args.filter((a, i) => a !== "--dry-run" && a !== "--platform" && (platformAt < 0 || i !== platformAt + 1));
+const [apkPath, version, notes] = positional;
 
-if (!apkPath || !version) fail("usage: npm run release -- <path-to-apk> <version> [notes] [--dry-run]");
+if (!apkPath || !version) fail("usage: npm run release -- <path> <version> [notes] [--platform android|windows] [--dry-run]");
 if (!/^\d+(\.\d+){1,2}$/.test(version!)) fail(`version must look like 1.1 or 1.1.2, got: ${version}`);
 
 let sizeBytes = 0;
@@ -57,7 +62,8 @@ const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_SERVICE_ROLE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
 
-const key = `TheFatty-v${version}.apk`;
+const isWindows = platform === "windows";
+const key = isWindows ? `TheFatty-Windows-v${version}.zip` : `TheFatty-v${version}.apk`;
 const url = `${cfg.R2_PUBLIC_URL}/${key}`;
 
 // Checks that run in both modes, so --dry-run proves credentials and schema without uploading.
@@ -68,9 +74,9 @@ try {
   fail(`cannot access R2 bucket "${cfg.R2_BUCKET}": ${(e as Error).message}`);
 }
 
-const existing = await supabase.from("releases").select("id").eq("version", version!).maybeSingle();
+const existing = await supabase.from("releases").select("id").eq("platform", platform).eq("version", version!).maybeSingle();
 if (existing.error) fail(`cannot read releases (did you run the migrations?): ${existing.error.message}`);
-if (existing.data) fail(`version ${version} already exists in releases; use a new version number`);
+if (existing.data) fail(`${platform} version ${version} already exists in releases; use a new version number`);
 log("Supabase reachable, version is new.");
 
 if (dryRun) {
@@ -85,8 +91,8 @@ await new Upload({
     Bucket: cfg.R2_BUCKET,
     Key: key,
     Body: createReadStream(apkPath!),
-    ContentType: "application/vnd.android.package-archive",
-    ContentDisposition: 'attachment; filename="TheFatty.apk"',
+    ContentType: isWindows ? "application/zip" : "application/vnd.android.package-archive",
+    ContentDisposition: `attachment; filename="${isWindows ? "TheFatty-Windows.zip" : "TheFatty.apk"}"`,
     CacheControl: "public, max-age=31536000, immutable", // versioned key, never overwritten
   },
 }).done();
@@ -94,12 +100,12 @@ await new Upload({
 // The partial unique index allows one current release, so clear the old one before setting the new one.
 const inserted = await supabase
   .from("releases")
-  .insert({ version, r2_key: key, size_bytes: sizeBytes, notes: notes ?? null, is_current: false })
+  .insert({ version, platform, r2_key: key, size_bytes: sizeBytes, notes: notes ?? null, is_current: false })
   .select("id")
   .single();
 if (inserted.error) fail(`uploaded to R2 but could not record the release: ${inserted.error.message}`);
 
-const cleared = await supabase.from("releases").update({ is_current: false }).eq("is_current", true);
+const cleared = await supabase.from("releases").update({ is_current: false }).eq("platform", platform).eq("is_current", true);
 if (cleared.error) fail(`release ${version} recorded but could not clear the old current: ${cleared.error.message}`);
 
 const marked = await supabase.from("releases").update({ is_current: true }).eq("id", inserted.data!.id);

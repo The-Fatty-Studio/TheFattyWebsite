@@ -52,6 +52,20 @@ describe("POST /api/download", () => {
     expect(JSON.stringify(events[0])).not.toContain("8.8.8.8");
   });
 
+  it("defaults to android and accepts a windows download", async () => {
+    const { app, events } = await setup();
+    await app.inject({ method: "POST", url: "/api/download" });
+    await app.inject({ method: "POST", url: "/api/download?platform=windows" });
+    expect(events.map((e) => e.platform)).toEqual(["android", "windows"]);
+  });
+
+  it("rejects an unknown platform", async () => {
+    const { app, events } = await setup();
+    const res = await app.inject({ method: "POST", url: "/api/download?platform=ios" });
+    expect(res.statusCode).toBe(400);
+    expect(events).toHaveLength(0);
+  });
+
   it("still answers 204 when storing fails", async () => {
     const { app } = await setup({}, true);
     const res = await app.inject({ method: "POST", url: "/api/download" });

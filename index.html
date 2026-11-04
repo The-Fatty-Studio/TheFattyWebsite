@@ -81,7 +81,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="style.css?v=20261024b">
+<link rel="stylesheet" href="style.css?v=20261104">
 </head>
 <body>
 <a class="skip" href="#top">Skip to content</a>
@@ -107,14 +107,22 @@
     <p class="lead">Fight zombies with a belt and break open the cages to rescue the trapped villagers. They move into your village, go to work, and their work pays for the upgrades that make you stronger for the next mission.</p>
 
     <div id="download" class="dl">
-      <a id="dl-btn" class="btn" href="downloads/TheBelt.apk" rel="nofollow" download>
-        <span class="btn-main">Download APK</span>
-        <span class="btn-sub" id="dl-meta">Version <span data-version>1.0</span></span>
-      </a>
+      <div class="dl-row" id="dl-row">
+        <a id="dl-btn" class="btn" href="downloads/TheBelt.apk" rel="nofollow" download>
+          <span class="btn-main">Download APK</span>
+          <span class="btn-sub" id="dl-meta">Android &middot; Version <span data-version>1.0</span></span>
+        </a>
+        <a id="dl-win" class="btn btn-alt" href="#" rel="nofollow" download hidden>
+          <span class="btn-main">Download for Windows</span>
+          <span class="btn-sub" id="dl-win-meta">ZIP &middot; Version <span data-win-version></span></span>
+        </a>
+      </div>
       <ul class="facts">
         <li>Android 8.0+</li>
+        <li data-win hidden>Windows PC</li>
         <li>Free</li>
         <li id="dl-size" hidden></li>
+        <li id="dl-win-size" hidden></li>
       </ul>
       <p class="note">First time installing an APK? <a href="#install">Read the 30-second guide.</a></p>
     </div>
@@ -321,6 +329,18 @@
     </ol>
   </section>
 
+  <section id="install-windows" class="section alt" data-win hidden>
+    <h2>How to install The Fatty on Windows</h2>
+    <p class="sub">The Windows version is a ZIP file. There is no installer: you unpack it and run the game.</p>
+    <ol class="steps">
+      <li><strong>Download</strong> the ZIP with the Windows button above.</li>
+      <li><strong>Extract it first.</strong> Right-click the ZIP and choose <strong>Extract All</strong>. Don't run the game from inside the ZIP, it needs the other files next to it.</li>
+      <li>Open the extracted folder and run <strong>The Fatty.exe</strong>.</li>
+      <li>If Windows shows <strong>Windows protected your PC</strong>, click <strong>More info</strong>, then <strong>Run anyway</strong>. Windows does this for games from small developers it doesn't know yet. Only do it for the file you downloaded from this page.</li>
+    </ol>
+    <p class="note">There is nothing to uninstall: to remove the game, delete its folder.</p>
+  </section>
+
   <section id="faq" class="section alt">
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -331,6 +351,14 @@
       <details>
         <summary>Is The Fatty on Google Play?</summary>
         <p>Not right now. You download the APK from this page and install it yourself. The <a href="#install">install guide</a> takes about 30 seconds.</p>
+      </details>
+      <details data-win hidden>
+        <summary>Is there a Windows version?</summary>
+        <p>Yes. Use the <strong>Download for Windows</strong> button at the top of this page. It is a ZIP file: extract it and run <strong>The Fatty.exe</strong>. The <a href="#install-windows">Windows guide</a> has the steps.</p>
+      </details>
+      <details data-win hidden>
+        <summary>Windows says &ldquo;Windows protected your PC&rdquo;. Is it safe?</summary>
+        <p>Windows shows that screen for programs from small developers that it hasn't seen often. If you downloaded the game from this page, click <strong>More info</strong> and then <strong>Run anyway</strong>. Please don't run copies from other sites: only this page is the official download.</p>
       </details>
       <details>
         <summary>Which Android versions does it run on?</summary>
@@ -364,8 +392,8 @@
 
 <footer class="footer">
   <p><strong>THE FATTY</strong> &middot; <a href="https://github.com/OrlinStefanov/TheBeltOriginal">GitHub</a> &middot; <a href="community.html" rel="nofollow">Community</a> &middot; <a href="terms.html">Terms &amp; Privacy</a> &middot; <a href="admin.html" rel="nofollow">Admin</a></p>
-  <p class="credits">&copy; 2026 OKSolutions. All rights reserved. Do not redistribute the APK.</p>
-  <p class="credits">Built with Unity. Includes licensed art and effects from the Unity Asset Store, including Cainos, Tiny Swords and Matthew Guz. Only install APKs from this page.</p>
+  <p class="credits">&copy; 2026 OKSolutions. All rights reserved. Do not redistribute the game files.</p>
+  <p class="credits">Built with Unity. Includes licensed art and effects from the Unity Asset Store, including Cainos, Tiny Swords and Matthew Guz. Only install the game from this page.</p>
 </footer>
 
 <script src="config.js"></script>

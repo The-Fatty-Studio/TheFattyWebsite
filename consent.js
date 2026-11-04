@@ -1,8 +1,8 @@
 // Small bottom banner asking first-time visitors to accept the Terms of Service. It never blocks the page
-// (so search engines and readers see everything), but the APK download waits for a yes. The choice is kept in a
+// (so search engines and readers see everything), but the game download waits for a yes. The choice is kept in a
 // plain first-party cookie (no localStorage). Bump TERMS_VERSION when terms.html changes materially.
 (function () {
-  var TERMS_VERSION = '2026-10-21';
+  var TERMS_VERSION = '2026-11-04';
   var COOKIE = 'fatty_terms';
 
   function accepted() {
@@ -31,7 +31,7 @@
   var text = el('p', 'consent-text');
   text.setAttribute('aria-live', 'polite');
   var intro = el('strong', null, 'Terms of Service. ');
-  var body = document.createTextNode('By using this site you agree to our terms and privacy notice, and accept that the APK is installed at your own risk. ');
+  var body = document.createTextNode('By using this site you agree to our terms and privacy notice, and accept that the game is installed at your own risk. ');
   var link = el('a', null, 'Read the terms');
   link.href = 'terms.html';
   text.appendChild(intro);
@@ -79,7 +79,7 @@
 
   // The download button does nothing until the terms are accepted.
   function gateDownload(e) {
-    var t = e.target.closest && e.target.closest('#dl-btn');
+    var t = e.target.closest && e.target.closest('#dl-btn, #dl-win');
     if (!t) return;
     e.preventDefault();
     e.stopImmediatePropagation();

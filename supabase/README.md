@@ -9,6 +9,7 @@ Supabase dashboard → **SQL Editor** → New query. Paste and run each file **i
 4. `migrations/0004_download_analytics.sql` (the admin dashboard's stats function)
 5. `migrations/0005_community.sql` (usernames and the review summary; community page)
 6. `migrations/0006_reviews_private_columns.sql` (stops the public key reading review author ids)
+7. `migrations/0007_windows_releases.sql` (releases get a platform so Windows ZIPs can be published; needed before `update-windows.sh`)
 
 Each file is meant to run once. If one fails, fix the cause and rerun only that file after dropping what it half-created.
 
