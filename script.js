@@ -82,3 +82,22 @@ const WIN_SIZE_MB = 51;
     meta.textContent = 'APK coming soon';
   });
 })();
+
+// Trailer: nothing is loaded from YouTube until the visitor presses play (no third-party requests on page load).
+(function () {
+  var box = document.getElementById('trailer-video');
+  if (!box) return;
+  var id = box.getAttribute('data-youtube');
+  var btn = box.querySelector('.video-play');
+  if (!id || !/^[\w-]{11}$/.test(id) || !btn) return;
+  btn.addEventListener('click', function () {
+    var frame = document.createElement('iframe');
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+    frame.title = box.getAttribute('data-title') || 'Trailer';
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    frame.setAttribute('allowfullscreen', '');
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.replaceChildren(frame);
+    frame.focus();
+  });
+})();
