@@ -6,9 +6,9 @@ const API_URL = 'https://thefatty-api.onrender.com';
 // Set by update-apk.sh; shown for external (R2) links where the size can't be fetched.
 const APK_SIZE_MB = 76;
 // Windows build (ZIP). Set by update-windows.sh; while WIN_PATH is empty the Windows button and guide stay hidden.
-const WIN_PATH = 'https://pub-b506b992cfc145749e85bcb90ee6b325.r2.dev/TheFatty-Windows-v1.005.zip';
-const WIN_VERSION = '1.005';
-const WIN_SIZE_MB = 51;
+const WIN_PATH = 'https://pub-b506b992cfc145749e85bcb90ee6b325.r2.dev/TheFatty-Windows-v1.006.zip';
+const WIN_VERSION = '1.006';
+const WIN_SIZE_MB = 66;
 
 (function () {
   document.querySelectorAll('[data-version]').forEach(function (el) { el.textContent = APK_VERSION; });
