@@ -6,3 +6,4 @@ dist/
 *.log
 .release-local
 .release-local-windows
+installer-out/
