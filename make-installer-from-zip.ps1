@@ -16,10 +16,12 @@ param(
     [Parameter(Mandatory = $true)][string]$Iss,
     [string]$Zip,
     [string]$Version,
-    [string]$OutDir = (Join-Path $PSScriptRoot 'installer-out')
+    [string]$OutDir
 )
 
 $ErrorActionPreference = 'Stop'
+# $PSScriptRoot is empty inside param() defaults in Windows PowerShell 5.1, so set the default here.
+if (-not $OutDir) { $OutDir = Join-Path $PSScriptRoot 'installer-out' }
 if (-not (Test-Path $Iss)) { throw "TheFatty.iss not found: $Iss (it is in the game repo, folder Installer)" }
 $Iss = (Resolve-Path $Iss).Path
 
