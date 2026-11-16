@@ -36,7 +36,7 @@ export const downloadRoutes: FastifyPluginAsyncZod<Options> = async (app, { conf
     async (req, reply) => {
       // Cheap abuse filter: browsers always send Origin on cross-origin POSTs. Skipped outside
       // production so Scalar and local pages can be used for testing.
-      if (config.NODE_ENV === "production" && req.headers.origin !== config.ALLOWED_ORIGIN) {
+      if (config.NODE_ENV === "production" && !config.ALLOWED_ORIGINS.includes(req.headers.origin ?? "")) {
         return reply.code(403).send({ error: "forbidden" });
       }
 

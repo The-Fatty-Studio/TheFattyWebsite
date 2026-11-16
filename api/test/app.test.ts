@@ -57,6 +57,9 @@ describe("config", () => {
     expect(() => loadConfig(prod)).toThrow(/PUBLIC_URL/);
     expect(() => loadConfig({ ...prod, PUBLIC_URL: "http://api.example.com" })).toThrow(/PUBLIC_URL/);
     expect(loadConfig({ ...prod, PUBLIC_URL: "https://api.example.com/" }).PUBLIC_URL).toBe("https://api.example.com");
+    const multi = loadConfig({ ...prod, PUBLIC_URL: "https://api.example.com", ALLOWED_ORIGIN: "https://a.example.com, https://b.example.com/" });
+    expect(multi.ALLOWED_ORIGINS).toEqual(["https://a.example.com", "https://b.example.com"]);
+    expect(() => loadConfig({ ...prod, PUBLIC_URL: "https://api.example.com", ALLOWED_ORIGIN: "https://a.example.com,nope" })).toThrow(/ALLOWED_ORIGIN/);
   });
 });
 
@@ -138,7 +141,7 @@ describe("cors", () => {
     const ok = await get("/health", { origin: "https://example.github.io" });
     expect(ok.headers["access-control-allow-origin"]).toBe("https://example.github.io");
     const bad = await get("/health", { origin: "https://evil.example" });
-    // Fixed allow-list: the header never echoes a foreign origin, so browsers block it.
-    expect(bad.headers["access-control-allow-origin"]).toBe("https://example.github.io");
+    // Allow-list: a foreign origin gets no CORS header at all, so browsers block it.
+    expect(bad.headers["access-control-allow-origin"]).toBeUndefined();
   });
 });

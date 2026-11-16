@@ -1,7 +1,7 @@
 {
   "name": "The Fatty",
   "short_name": "The Fatty",
-  "description": "Free top-down zombie action game for Android.",
+  "description": "Free top-down zombie action game for Android and Windows.",
   "start_url": "./",
   "scope": "./",
   "display": "browser",

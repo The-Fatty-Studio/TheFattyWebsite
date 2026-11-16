@@ -5,8 +5,9 @@ const httpUrl = z.string().url().regex(/^https?:\/\//, "must start with http:// 
 const schema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.coerce.number().int().positive().default(3000),
-  // Exact origin of the static site, e.g. https://the-fatty-studio.github.io (no path, no trailing slash)
-  ALLOWED_ORIGIN: httpUrl,
+  // Exact origin of the static site, e.g. https://thefatty.ko-solutions.net (no path, no trailing slash).
+  // Several origins can be given, comma-separated, e.g. while moving to a new domain.
+  ALLOWED_ORIGIN: z.string().min(1),
   SUPABASE_URL: httpUrl,
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   // Public anon/publishable key. Used server-side only, to sign users in against Supabase Auth.
@@ -20,7 +21,7 @@ const schema = z.object({
   IP_HASH_SECRET: z.string().min(16),
 });
 
-export type Config = Omit<z.infer<typeof schema>, "PUBLIC_URL"> & { PUBLIC_URL: string };
+export type Config = Omit<z.infer<typeof schema>, "PUBLIC_URL"> & { PUBLIC_URL: string; ALLOWED_ORIGINS: string[] };
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const parsed = schema.safeParse(env);
@@ -33,7 +34,12 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     // Without this the API would silently fall back to localhost and break cookies and CSRF checks.
     throw new Error("Invalid environment configuration: PUBLIC_URL (must be https:// in production)");
   }
+  const origins = data.ALLOWED_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean);
+  if (origins.length === 0 || !origins.every((o) => httpUrl.safeParse(o).success)) {
+    throw new Error("Invalid environment configuration: ALLOWED_ORIGIN");
+  }
+  const allowedOrigins = origins.map((o) => new URL(o).origin);
   // Normalised to an origin (no path/trailing slash) so it can be compared with the Origin header.
   const publicUrl = new URL(data.PUBLIC_URL ?? `http://localhost:${data.PORT}`).origin;
-  return { ...data, PUBLIC_URL: publicUrl };
+  return { ...data, PUBLIC_URL: publicUrl, ALLOWED_ORIGINS: allowedOrigins };
 }
