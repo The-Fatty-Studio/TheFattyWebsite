@@ -1,0 +1,17 @@
+# Hostinger (LiteSpeed / Apache). Keeps the repo's non-site files private and serves the custom 404.
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Source code, SQL and tooling are in the repo for deployment only, never for visitors.
+RewriteRule ^(api|supabase|\.claude|\.git)(/|$) - [R=404,L]
+RewriteRule \.(sh|cmd|ps1|md|yaml|yml|php\.bak)$ - [R=404,L]
+RewriteRule ^(render\.yaml|release\.cmd|README\.md)$ - [R=404,L]
+</IfModule>
+
+# Never let a browser keep an old copy of the page logic.
+<IfModule mod_headers.c>
+<FilesMatch "\.(html|js)$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+</IfModule>

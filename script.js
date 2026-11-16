@@ -16,13 +16,15 @@ const WIN_SIZE_MB = 47;
   var btn = document.getElementById('dl-btn');
   var meta = document.getElementById('dl-meta');
   var size = document.getElementById('dl-size');
-  btn.setAttribute('href', APK_PATH);
+  // On our own domain the files are served through download.php (same domain, same file name); elsewhere (GitHub Pages) link to R2 directly.
+  var ownHost = location.hostname === 'thefatty.ko-solutions.net';
+  btn.setAttribute('href', ownHost ? 'download.php?f=android' : APK_PATH);
 
   // Windows build: reveal the button, guide and FAQ once a ZIP has been published.
   var winBtn = document.getElementById('dl-win');
   if (WIN_PATH) {
     document.querySelectorAll('[data-win-version]').forEach(function (el) { el.textContent = WIN_VERSION; });
-    winBtn.setAttribute('href', WIN_PATH);
+    winBtn.setAttribute('href', ownHost ? 'download.php?f=windows' : WIN_PATH);
     // An .exe is the installer; anything else is the older ZIP. The guide and FAQ show the matching text.
     var winKind = /\.exe(\?|$)/i.test(WIN_PATH) ? 'setup' : 'zip';
     document.querySelectorAll('[data-win-kind]').forEach(function (el) {

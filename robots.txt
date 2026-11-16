@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://the-fatty-studio.github.io/TheFattyWebsite/sitemap.xml
+Sitemap: https://thefatty.ko-solutions.net/sitemap.xml

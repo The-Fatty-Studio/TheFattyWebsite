@@ -109,7 +109,7 @@ export async function buildApp(config: Config, { auth, downloads, analytics, com
   // CORS is only for the public, cookie-less endpoints. Credentials are deliberately not allowed,
   // so a page on another site can never make the browser send the session cookies.
   await app.register(cors, {
-    origin: config.ALLOWED_ORIGIN,
+    origin: config.ALLOWED_ORIGINS,
     methods: ["GET", "POST"],
     allowedHeaders: ["Authorization", "Content-Type"],
   });
