@@ -1,6 +1,6 @@
 // Usage: npm run release -- <path-to-apk-or-zip> <version> [notes] [--platform android|windows] [--dry-run]
 // Uploads the build to Cloudflare R2, records it in `releases` and marks it current for its platform
-// (android: the .apk, windows: the .zip).
+// (android: the .apk, windows: the Setup .exe installer, or the older .zip).
 // Progress goes to stderr; the final stdout line is JSON ({ url, sizeBytes }) for update-apk.sh.
 import "dotenv/config";
 import { HeadBucketCommand, S3Client } from "@aws-sdk/client-s3";
@@ -63,7 +63,8 @@ const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_SERVICE_ROLE_KEY, {
 });
 
 const isWindows = platform === "windows";
-const key = isWindows ? `TheFatty-Windows-v${version}.zip` : `TheFatty-v${version}.apk`;
+const isInstaller = isWindows && /\.exe$/i.test(apkPath!);
+const key = isInstaller ? `TheFatty-Setup-v${version}.exe` : isWindows ? `TheFatty-Windows-v${version}.zip` : `TheFatty-v${version}.apk`;
 const url = `${cfg.R2_PUBLIC_URL}/${key}`;
 
 // Checks that run in both modes, so --dry-run proves credentials and schema without uploading.
@@ -91,8 +92,8 @@ await new Upload({
     Bucket: cfg.R2_BUCKET,
     Key: key,
     Body: createReadStream(apkPath!),
-    ContentType: isWindows ? "application/zip" : "application/vnd.android.package-archive",
-    ContentDisposition: `attachment; filename="${isWindows ? "TheFatty-Windows.zip" : "TheFatty.apk"}"`,
+    ContentType: isInstaller ? "application/vnd.microsoft.portable-executable" : isWindows ? "application/zip" : "application/vnd.android.package-archive",
+    ContentDisposition: `attachment; filename="${isInstaller ? `TheFatty-Setup-${version}.exe` : isWindows ? "TheFatty-Windows.zip" : "TheFatty.apk"}"`,
     CacheControl: "public, max-age=31536000, immutable", // versioned key, never overwritten
   },
 }).done();

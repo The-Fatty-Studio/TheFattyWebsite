@@ -5,7 +5,7 @@ const APK_VERSION = '1.006';
 const API_URL = 'https://thefatty-api.onrender.com';
 // Set by update-apk.sh; shown for external (R2) links where the size can't be fetched.
 const APK_SIZE_MB = 76;
-// Windows build (ZIP). Set by update-windows.sh; while WIN_PATH is empty the Windows button and guide stay hidden.
+// Windows build (the Setup .exe installer, or a ZIP). Set by update-windows.sh; while WIN_PATH is empty the Windows button and guide stay hidden.
 const WIN_PATH = 'https://pub-b506b992cfc145749e85bcb90ee6b325.r2.dev/TheFatty-Windows-v1.006.zip';
 const WIN_VERSION = '1.006';
 const WIN_SIZE_MB = 66;
@@ -23,6 +23,14 @@ const WIN_SIZE_MB = 66;
   if (WIN_PATH) {
     document.querySelectorAll('[data-win-version]').forEach(function (el) { el.textContent = WIN_VERSION; });
     winBtn.setAttribute('href', WIN_PATH);
+    // An .exe is the installer; anything else is the older ZIP. The guide and FAQ show the matching text.
+    var winKind = /\.exe(\?|$)/i.test(WIN_PATH) ? 'setup' : 'zip';
+    document.querySelectorAll('[data-win-kind]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-win-kind') !== winKind;
+    });
+    document.querySelectorAll('[data-win-type]').forEach(function (el) {
+      el.textContent = winKind === 'setup' ? 'Installer' : 'ZIP';
+    });
     document.querySelectorAll('[data-win]').forEach(function (el) { el.hidden = false; });
     winBtn.hidden = false;
     if (WIN_SIZE_MB > 0) {

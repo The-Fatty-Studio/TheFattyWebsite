@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish the Windows build (a ZIP). Easiest: double-click release-windows.cmd, or run ./update-windows.sh with no
+# Publish the Windows build: the Setup .exe installer (TheFatty-Setup-<version>.exe from Installer\build-installer.ps1), or a ZIP. Easiest: double-click release-windows.cmd, or run ./update-windows.sh with no
 # arguments; it remembers the ZIP path and suggests a version. Full form: ./update-windows.sh <path-to-zip> <version> [-y]
 # Uploads the ZIP to Cloudflare R2, records it in Supabase (platform windows), then commits the new link in script.js.
 # Needs api/.env filled in (Supabase + R2), `npm install` done in api/, and migration 0007 applied in Supabase.
@@ -18,7 +18,7 @@ cd "$(git rev-parse --show-toplevel)"
 SAVED_FILE=".release-local-windows"
 if [ -z "$ZIP_SRC" ]; then
   SAVED=$(cat "$SAVED_FILE" 2>/dev/null || true)
-  read -r -p "Windows ZIP file${SAVED:+ [$SAVED]}: " ZIP_SRC
+  read -r -p "Windows installer (.exe) or ZIP${SAVED:+ [$SAVED]}: " ZIP_SRC
   ZIP_SRC="${ZIP_SRC:-$SAVED}"
   ZIP_SRC="${ZIP_SRC%\"}"; ZIP_SRC="${ZIP_SRC#\"}"   # drag-and-drop adds quotes
 fi
@@ -45,8 +45,13 @@ fi
 git pull --ff-only -q origin main || die "could not update main from GitHub"
 [ -d api/node_modules ] || die "run 'npm install' in api/ first"
 
+command -v node >/dev/null || die "node is needed to validate the file"
+if [[ "$ZIP_SRC" =~ \.[eE][xX][eE]$ ]]; then
+  # The installer: a Windows executable ("MZ" header) named like TheFatty-Setup-<version>.exe, not the game itself.
+  [ "$(head -c 2 "$ZIP_SRC")" = "MZ" ] || die "not a Windows executable: $ZIP_SRC"
+  [[ "$(basename "$ZIP_SRC")" == *[Ss]etup* ]] || die "this does not look like the installer (expected TheFatty-Setup-<version>.exe); the raw game exe cannot be published alone"
+else
 # Make sure it really is a ZIP that holds the Windows game (The Fatty.exe), and not a wrong file such as the APK.
-command -v node >/dev/null || die "node is needed to validate the ZIP"
 node -e '
 const fs = require("fs");
 const fd = fs.openSync(process.argv[1], "r");
@@ -69,6 +74,7 @@ case $? in
   3) die "no \"The Fatty.exe\" inside this ZIP; is it the Windows build?" ;;
   *) die "not a valid ZIP file" ;;
 esac
+fi
 
 SIZE_BYTES=$(wc -c < "$ZIP_SRC" | tr -d ' ')
 SIZE_MB=$(( SIZE_BYTES / 1048576 ))
@@ -81,7 +87,7 @@ ABS_ZIP="$(cd "$(dirname "$ZIP_SRC")" && pwd)/$(basename "$ZIP_SRC")"
 
 echo
 echo "Publishing Windows:  ${OLD_VERSION:-none yet} -> $VERSION"
-echo "ZIP:                 $ZIP_SRC (${SIZE_MB} MB)"
+echo "File:                $ZIP_SRC (${SIZE_MB} MB)"
 echo "SHA-256:             $SHA"
 echo
 if [ "$ASSUME_YES" != "-y" ]; then
