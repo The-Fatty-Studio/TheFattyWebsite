@@ -129,7 +129,7 @@
         </a>
         <a id="dl-win" class="btn btn-alt" href="#" rel="nofollow" download hidden>
           <span class="btn-main">Download for Windows</span>
-          <span class="btn-sub" id="dl-win-meta">ZIP &middot; Version <span data-win-version></span></span>
+          <span class="btn-sub" id="dl-win-meta"><span data-win-type>Installer</span> &middot; Version <span data-win-version></span></span>
         </a>
       </div>
       <ul class="facts">
@@ -357,14 +357,23 @@
 
   <section id="install-windows" class="section alt" data-win hidden>
     <h2>How to install The Fatty on Windows</h2>
-    <p class="sub">The Windows version is a ZIP file. There is no installer: you unpack it and run the game.</p>
-    <ol class="steps">
+    <p class="sub" data-win-kind="setup">The Windows version is a setup file. Run it and it installs the game for you: no unpacking.</p>
+    <p class="sub" data-win-kind="zip" hidden>The Windows version is a ZIP file. There is no installer: you unpack it and run the game.</p>
+    <ol class="steps" data-win-kind="setup">
+      <li><strong>Download</strong> the installer with the Windows button above. It is called <strong>TheFatty-Setup</strong>.</li>
+      <li><strong>Run it.</strong> Windows asks whether to install for all users or just for you. &ldquo;Just for me&rdquo; needs no administrator rights.</li>
+      <li>Choose the folder (the default is fine), tick <strong>Create a desktop shortcut</strong> if you want one, and click <strong>Install</strong>.</li>
+      <li>Click <strong>Finish</strong> to start playing, or open <strong>The Fatty</strong> from the Start menu or your desktop later.</li>
+      <li>If Windows shows <strong>Windows protected your PC</strong>, click <strong>More info</strong>, then <strong>Run anyway</strong>. Windows does this for games from small developers it doesn't know yet. Only do it for the file you downloaded from this page.</li>
+    </ol>
+    <ol class="steps" data-win-kind="zip" hidden>
       <li><strong>Download</strong> the ZIP with the Windows button above.</li>
       <li><strong>Extract it first.</strong> Right-click the ZIP and choose <strong>Extract All</strong>. Don't run the game from inside the ZIP, it needs the other files next to it.</li>
       <li>Open the extracted folder and run <strong>The Fatty.exe</strong>.</li>
       <li>If Windows shows <strong>Windows protected your PC</strong>, click <strong>More info</strong>, then <strong>Run anyway</strong>. Windows does this for games from small developers it doesn't know yet. Only do it for the file you downloaded from this page.</li>
     </ol>
-    <p class="note">There is nothing to uninstall: to remove the game, delete its folder.</p>
+    <p class="note" data-win-kind="setup">To remove the game, uninstall <strong>The Fatty</strong> in Windows <strong>Settings &rarr; Apps</strong>. Your progress is kept, so installing it again picks up where you left off. Windows 10 or newer, 64-bit.</p>
+    <p class="note" data-win-kind="zip" hidden>There is nothing to uninstall: to remove the game, delete its folder.</p>
   </section>
 
   <section id="faq" class="section alt">
@@ -380,7 +389,8 @@
       </details>
       <details data-win hidden>
         <summary>Is there a Windows version?</summary>
-        <p>Yes. Use the <strong>Download for Windows</strong> button at the top of this page. It is a ZIP file: extract it and run <strong>The Fatty.exe</strong>. The <a href="#install-windows">Windows guide</a> has the steps.</p>
+        <p data-win-kind="setup">Yes. Use the <strong>Download for Windows</strong> button at the top of this page. It is a setup file: run it and follow the steps. The <a href="#install-windows">Windows guide</a> has the details.</p>
+        <p data-win-kind="zip" hidden>Yes. Use the <strong>Download for Windows</strong> button at the top of this page. It is a ZIP file: extract it and run <strong>The Fatty.exe</strong>. The <a href="#install-windows">Windows guide</a> has the steps.</p>
       </details>
       <details data-win hidden>
         <summary>Windows says &ldquo;Windows protected your PC&rdquo;. Is it safe?</summary>
